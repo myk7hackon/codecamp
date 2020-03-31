@@ -85,7 +85,17 @@ def dungeon_test(dungeon, row, col, visited, level, lengths, prev=(), bfs_graph=
         print(lengths)
 
 
-graph = [[1, 2], [3], [4], [5, 6], [7, 8, 9], [], [], [], [], [], [10]]
+def top_sort(node, graph, visited):
+    if not visited[node]:
+        visited[node] = True
+        for i in graph[node]:
+            if not visited[i]:
+                top_sort(i, graph, visited)
+        print(node, end=" ")
+
+## top sort can be used both for shortest path and longest path(by multiplying by -1)
+
+graph = [[1, 2], [3], [4], [5, 6, 0], [7, 8, 9], [], [], [], [], [], [10]]
 
 dungeon = [
     [".", ".", ".", "#", ".", ".", "."],
@@ -117,9 +127,10 @@ if __name__ == "__main__":
     visited = [
         ["NOT VISITED" for i in range(len(dungeon[0]))] for j in range(len(dungeon))
     ]
-
-    # from pprint import pprint
-
-    # pprint(lengths)
     dungeon_test(dungeon, 0, 0, visited, 0, lengths)
-    # print(mas_len, "  path is  ", final_ans)
+    print("Top Sort")
+    visited = [False for i in range(len(graph))]
+    for i in range(len(graph)):
+        if not visited[i]:
+            top_sort(i, graph, visited)
+            print()
